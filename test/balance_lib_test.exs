@@ -46,7 +46,6 @@ defmodule Teiserver.Battle.BalanceLibTest do
              deviation: 0,
              means: %{1 => 6.5, 2 => 6.5},
              stdevs: %{1 => 1.5, 2 => 0.5},
-             parties: {0, 0}
            }
   end
 
