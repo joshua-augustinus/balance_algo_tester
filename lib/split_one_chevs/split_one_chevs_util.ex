@@ -1,4 +1,6 @@
 defmodule Teiserver.Battle.Balance.SplitOneChevs.SplitOneChevsUtil do
+  alias Teiserver.CacheUser
+
   @doc """
   Input:
   expanded_group:
@@ -20,6 +22,11 @@ defmodule Teiserver.Battle.Balance.SplitOneChevs.SplitOneChevsUtil do
         # Zipping will create binary tuples from 2 lists
         {id, rating} <- Enum.zip(members, ratings),
         # Create result value
-        do: %{member_id: id, rating: rating}
+        rank = get_rank(id),
+        do: %{member_id: id, rating: rating, rank: rank}
+  end
+
+  def get_rank(member_id) do
+    CacheUser.calculate_rank(member_id, "Playtime")
   end
 end

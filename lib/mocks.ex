@@ -18,7 +18,8 @@ defmodule Teiserver.Account do
     %{}
   end
 
-  def get_rating(user_id, rating_type_id) when is_integer(user_id) and is_integer(rating_type_id) do
+  def get_rating(user_id, rating_type_id)
+      when is_integer(user_id) and is_integer(rating_type_id) do
     %{}
   end
 
@@ -58,5 +59,21 @@ defmodule Central.Helpers.NumberHelper do
   def round(value, decimal_places) do
     dp_mult = :math.pow(10, decimal_places)
     round(value * dp_mult) / dp_mult
+  end
+end
+
+defmodule Teiserver.CacheUser do
+  def calculate_rank(userid, "Playtime") do
+    ingame_hours = rank_time(userid)
+
+    [5, 15, 30, 100, 300, 1000, 3000]
+    |> Enum.count(fn r -> r <= ingame_hours end)
+  end
+
+  @moduledoc """
+  This moc assumes the hours played is equal to the userid
+  """
+  def rank_time(userid) do
+    userid
   end
 end
