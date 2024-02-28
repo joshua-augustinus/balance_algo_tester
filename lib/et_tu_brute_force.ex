@@ -1,8 +1,6 @@
 defmodule Teiserver.Battle.BruteForceAlgorithm do
   import Teiserver.Battle.BalanceUtil
 
-  @max_switches 3
-
   @type expanded_group_or_pair :: BalanceUtils.expanded_group_or_pair
   @type team_map :: BalanceUtils.team_map
   @type group_list :: [expanded_group_or_pair()]
@@ -41,7 +39,7 @@ defmodule Teiserver.Battle.BruteForceAlgorithm do
   @spec make_list_of_team_combinations([{any, any}], any, any) :: any
   def make_list_of_team_combinations([], _team_count, teams) do teams end
   def make_list_of_team_combinations([first_candidate | rest_candidates], team_count, teams) do
-    {first_candidate, idx} = first_candidate
+    {first_candidate, _idx} = first_candidate
     # Combine two and two groups into a team
     # This is a recursive function that will combine all groups into teams
     # and then return a list of all possible combinations of teams
