@@ -20,8 +20,6 @@ defmodule Teiserver.Battle.CheekySwitcherSmartAlgorithm do
   import Teiserver.Battle.BalanceUtil
   alias Teiserver.Account
 
-  @max_switches 3
-
   @type expanded_group_or_pair :: BalanceUtils.expanded_group_or_pair
   @type team_map :: BalanceUtils.team_map
   @type group_list :: [expanded_group_or_pair()]
