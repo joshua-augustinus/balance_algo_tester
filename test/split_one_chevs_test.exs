@@ -1,6 +1,6 @@
 defmodule Teiserver.Battle.SplitOneChevsTest do
   use ExUnit.Case, async: false
-  alias Teiserver.Battle.Balance.SplitOneChevs.SplitOneChevsUtil
+  alias Teiserver.Battle.Balance.SplitOneChevs
   alias Teiserver.Battle.Logger
 
   test "perform" do
@@ -11,7 +11,7 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
     ]
 
     result =
-      SplitOneChevsUtil.perform(expanded_group, 2)
+      SplitOneChevs.perform(expanded_group, 2)
 
     assert result = %{
 
@@ -44,7 +44,7 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
     ]
 
     result =
-      SplitOneChevsUtil.flatten_members(expanded_group)
+      SplitOneChevs.flatten_members(expanded_group)
 
     assert result == [
              %{rating: 8, rank: 4, member_id: 100},
@@ -63,7 +63,7 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
     ]
 
     result =
-      SplitOneChevsUtil.assign_teams(members, 2)
+      SplitOneChevs.assign_teams(members, 2)
 
     assert result == [
              %{
@@ -85,7 +85,7 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
 
   test "create empty teams" do
     result =
-      SplitOneChevsUtil.create_empty_teams(3)
+      SplitOneChevs.create_empty_teams(3)
 
     assert result == [
              %{members: [], team_id: 1},
@@ -95,7 +95,7 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
   end
 
   test "standardise result" do
-    result = SplitOneChevsUtil.standardise_result(
+    result = SplitOneChevs.standardise_result(
       [
         %{
           members: [
