@@ -1,5 +1,6 @@
 defmodule Teiserver.Battle.Balance.SplitOneChevs.SplitOneChevsUtil do
   alias Teiserver.CacheUser
+  alias Teiserver.Battle.BalanceLib
 
   @doc """
   Input:
@@ -84,7 +85,7 @@ defmodule Teiserver.Battle.Balance.SplitOneChevs.SplitOneChevsUtil do
     end)
   end
 
-  @doc """
+    @doc """
   raw_input=
      [
              %{
@@ -103,12 +104,46 @@ defmodule Teiserver.Battle.Balance.SplitOneChevs.SplitOneChevsUtil do
              }
            ]
   """
+  def standardise_result(raw_input) do
+    ratings = standardise_ratings(raw_input)
+    team_sizes=standardise_team_sizes(raw_input)
+    team_groups= standardise_team_groups(raw_input)
+    means =
+      ratings
+      |> Map.new(fn {team, rating_sum} ->
+        {team, rating_sum / max(team_sizes[team], 1)}
+      end)
+
+      stdevs =
+        team_groups
+        |> Map.new(fn {team, group} ->
+          stdev =
+            group
+            |> Enum.map(fn m -> m.ratings end)
+            |> List.flatten()
+            |> Statistics.stdev()
+
+          {team, stdev}
+        end)
+    %{
+      team_groups: team_groups,
+      team_players: standardise_team_players(raw_input),
+      ratings: ratings,
+      captains: standardise_captains(raw_input),
+      team_sizes: team_sizes,
+      deviation: BalanceLib.get_deviation(ratings),
+      means: means,
+      stdevs: stdevs
+    }
+  end
+
+
   def standardise_team_groups(raw_input) do
     Map.new(raw_input, fn x-> {x.team_id, standardise_members(x.members)}end)
   end
 
   @doc """
-  raw_input=
+  members=
   [
                  %{rating: 6, rank: 0, member_id: 2},
                  %{rating: 5, rank: 0, member_id: 4}
@@ -118,8 +153,57 @@ defmodule Teiserver.Battle.Balance.SplitOneChevs.SplitOneChevsUtil do
                  %{members: [4], count: 1, group_rating: 5, ratings: [5]}
                ]
   """
-  def standardise_members(raw_input) do
-    for  %{rating: rating,   member_id: member_id } <- raw_input,
+  def standardise_members(members) do
+    for  %{rating: rating,   member_id: member_id } <- members,
       do: %{members: [member_id], count: 1, group_rating: rating, ratings: [rating]}
   end
+
+  def standardise_team_players(raw_input) do
+    Map.new(raw_input, fn x-> {x.team_id, standardise_member_ids(x.members)}end)
+
+  end
+
+  def standardise_member_ids(members) do
+    for  %{  member_id: member_id } <- members,
+      do: member_id
+  end
+
+  def standardise_ratings(raw_input) do
+    Map.new(raw_input, fn x-> {x.team_id, sum_ratings(x.members)}end)
+  end
+
+  @doc """
+  members = [
+                 %{rating: 17, rank: 0, member_id: 3},
+                 %{rating: 8, rank: 4, member_id: 100}
+            ]
+               """
+  def sum_ratings(members) do
+    Enum.reduce(members, 0,fn x,acc->
+      x.rating + acc
+    end)
+  end
+
+  def standardise_captains(raw_input) do
+    Map.new(raw_input, fn x-> {x.team_id, get_captain(x.members).member_id}end)
+
+  end
+
+  def get_captain(members) do
+    default_captain = Enum.at(members,0)
+    Enum.reduce(members, default_captain ,fn x,acc->
+      if(x.rating > acc.rating) do
+        x
+    else
+      acc
+    end
+
+    end)
+  end
+
+  def standardise_team_sizes(raw_input) do
+    Map.new(raw_input, fn x-> {x.team_id, length(x.members)}end)
+
+  end
+
 end
