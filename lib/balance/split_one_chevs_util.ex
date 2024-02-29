@@ -1,4 +1,4 @@
-defmodule Teiserver.Battle.Balance.SplitOneChevs.SplitOneChevsUtil do
+defmodule Teiserver.Battle.Balance.SplitOneChevs do
   alias Teiserver.CacheUser
   alias Teiserver.Battle.BalanceLib
 
