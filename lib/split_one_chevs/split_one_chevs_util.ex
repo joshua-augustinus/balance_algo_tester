@@ -39,15 +39,21 @@ defmodule Teiserver.Battle.Balance.SplitOneChevs.SplitOneChevsUtil do
   %{rating: 7, member_id: 3}
   ]
   """
-  def assign_teams(member_list) do
-    Enum.reduce(member_list, [%{team_id: 0, members: []}, %{team_id: 1, members: []}], fn x,
-                                                                                          acc ->
+  def assign_teams(member_list, number_of_teams) do
+    Enum.reduce(member_list, create_empty_teams(number_of_teams), fn x, acc ->
       picking_team = get_picking_team(acc)
       update_picking_team = Map.merge(picking_team, %{members: [x | picking_team.members]})
       [update_picking_team | get_non_picking_teams(acc, picking_team)]
     end)
   end
 
+  @spec create_empty_teams(any()) :: any()
+  def create_empty_teams(count) do
+    for i <- 1..count,
+        do: %{team_id: i, members: []}
+  end
+
+  @spec get_picking_team(any()) :: any()
   def get_picking_team(teams) do
     default_picking_team = Enum.at(teams, 0)
 
