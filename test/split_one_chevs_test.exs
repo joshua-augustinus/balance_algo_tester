@@ -60,4 +60,31 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
              %{members: [], team_id: 3}
            ]
   end
+
+  test "standardise result" do
+    result = SplitOneChevsUtil.standardise_team_groups(
+      [
+        %{
+          members: [
+            %{rating: 17, rank: 0, member_id: 3},
+            %{rating: 8, rank: 4, member_id: 100}
+          ],
+          team_id: 1
+        },
+        %{
+          members: [
+            %{rating: 6, rank: 0, member_id: 2},
+            %{rating: 5, rank: 0, member_id: 4}
+          ],
+          team_id: 2
+        }
+      ]
+    )
+   end
+
+  test "calculate standard deviation" do
+    input = [8,5]
+    result = Statistics.stdev(input);
+    assert result==1.5
+  end
 end

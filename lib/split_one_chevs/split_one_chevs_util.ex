@@ -83,4 +83,43 @@ defmodule Teiserver.Battle.Balance.SplitOneChevs.SplitOneChevsUtil do
       acc + x.rating
     end)
   end
+
+  @doc """
+  raw_input=
+     [
+             %{
+               members: [
+                 %{rating: 17, rank: 0, member_id: 3},
+                 %{rating: 8, rank: 4, member_id: 100}
+               ],
+               team_id: 1
+             },
+             %{
+               members: [
+                 %{rating: 6, rank: 0, member_id: 2},
+                 %{rating: 5, rank: 0, member_id: 4}
+               ],
+               team_id: 2
+             }
+           ]
+  """
+  def standardise_team_groups(raw_input) do
+    Map.new(raw_input, fn x-> {x.team_id, standardise_members(x.members)}end)
+  end
+
+  @doc """
+  raw_input=
+  [
+                 %{rating: 6, rank: 0, member_id: 2},
+                 %{rating: 5, rank: 0, member_id: 4}
+               ]
+  output= [
+                 %{members: [2], count: 1, group_rating: 6, ratings: [6]},
+                 %{members: [4], count: 1, group_rating: 5, ratings: [5]}
+               ]
+  """
+  def standardise_members(raw_input) do
+    for  %{rating: rating,   member_id: member_id } <- raw_input,
+      do: %{members: [member_id], count: 1, group_rating: rating, ratings: [rating]}
+  end
 end
