@@ -1,3 +1,7 @@
+# Introduction
+
+This repo is a copy of [Teifion's Balance Tester](https://github.com/beyond-all-reason/balance_algorithm) but with some new balance algorithms.
+
 # BalanceAlgorithm
 
 A set of files from [Teiserver](https://github.com/beyond-all-reason/teiserver) for testing balance algorithm changes without needing to have a whole server testing setup.

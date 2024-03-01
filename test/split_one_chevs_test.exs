@@ -2,6 +2,66 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
   use ExUnit.Case, async: false
   alias Teiserver.Battle.Balance.SplitOneChevs
   alias Teiserver.Battle.Logger
+  alias Teiserver.Battle.BalanceLib
+
+  #Define constants
+  @split_algo "split_one_chevs"
+
+
+  test "split one chevs FFA" do
+    result =
+      BalanceLib.create_balance(
+        [
+          %{1 => 5},
+          %{2 => 6},
+          %{3 => 7},
+          %{4 => 8}
+        ],
+        4,
+        algorithm: @split_algo
+      )
+
+      assert result.team_players == %{1 => [4], 2 => [3], 3 => [2], 4 => [1]}
+  end
+
+  test "split one chevs team FFA" do
+    result =
+      BalanceLib.create_balance(
+        [
+          %{1 => 5},
+          %{2 => 6},
+          %{3 => 7},
+          %{4 => 8},
+          %{5 => 9},
+          %{6 => 9}
+        ],
+        3,
+        algorithm: @split_algo
+      )
+
+    assert result.team_players == %{1 => [1, 5], 2 => [2, 6], 3 => [3, 4]}
+  end
+
+  test "split one chevs simple group" do
+    result =
+      BalanceLib.create_balance(
+        [
+          %{4 => 5, 1 => 8},
+          %{2 => 6},
+          %{3 => 7}
+        ],
+        2,
+        mode: :loser_picks,
+        rating_lower_boundary: 100,
+        rating_upper_boundary: 100,
+        mean_diff_max: 100,
+        stddev_diff_max: 100,
+        algorithm: @split_algo
+      )
+
+    assert result.team_players == %{1 => [4, 1], 2 => [2, 3]}
+
+   end
 
   test "perform" do
      expanded_group = [
