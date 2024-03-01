@@ -8,15 +8,8 @@ The purpose is to enable ideas for balance algorithms to be better tested and in
 You will need to install [Elixir](https://elixir-lang.org/).
 
 ```
-git clone git@github.com:beyond-all-reason/balance_algorithm.git
-cd balance_algorithm
 mix deps.get
 mix test
-
-> Compiling 1 file (.ex)
-> .........
-> Finished in 0.02 seconds (0.02s async, 0.00s sync)
-> 1 doctest, 8 tests, 0 failures
 ```
 
 ## Usage
@@ -24,5 +17,5 @@ mix test
 #### Tests
 We can use unit tests to ensure implementations of each algorithm produce the output expected, it also allows us to change internal details and ensure the algorithms as a whole are unaffected. We can run the tests with `mix test`. Tests are located in the [test] folder.
 
-#### Evaluate against data
-TODO: Mix task to run data against an algorithm and provide scoring metrics/output
+#### Mocked database calls
+Currently the split one chevs algo requires users' chev ranks. This is currently a mock rather than a real database call. The mock will treat users with id less than 5 as chev rank 0.
