@@ -128,7 +128,7 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
           team_id: 2
         }
       ]
-    )
+    )|> Map.drop([:logs, :time_taken])
 
     assert result ==%{
 
