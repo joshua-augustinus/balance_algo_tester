@@ -11,6 +11,8 @@ defmodule Teiserver.Battle.Balance.SplitOneChevs do
 
     This is repeated until all players are chosen.
 
+    This algorithm completely ignores parties.
+
   """
 
     @doc """
