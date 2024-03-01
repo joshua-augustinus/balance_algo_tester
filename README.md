@@ -12,6 +12,18 @@ mix deps.get
 mix test
 ```
 
+### Installation Issues
+If you have trouble calling mix deps.get, make sure you have a github ssh already set up. 
+
+If you get this error
+```
+Host key verification failed.
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+```
+Here's the solution: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints
+
 ## Usage
 
 #### Tests
