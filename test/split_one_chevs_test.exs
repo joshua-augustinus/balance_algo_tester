@@ -4,7 +4,7 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
   alias Teiserver.Battle.Logger
 
   test "perform" do
-    expanded_group = [
+     expanded_group = [
       %{count: 2, members: [100, 4], group_rating: 13, ratings: [8, 5]},
       %{count: 1, members: [2], group_rating: 6, ratings: [6]},
       %{count: 1, members: [3], group_rating: 7, ratings: [17]}
@@ -48,6 +48,26 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
              %{rating: 6, rank: 0, member_id: 2},
              %{rating: 17, rank: 0, member_id: 3}
            ]
+  end
+
+  test "sort members" do
+    members =[
+      %{rating: 8, rank: 4, member_id: 100},
+      %{rating: 5, rank: 0, member_id: 4},
+      %{rating: 6, rank: 0, member_id: 2},
+      %{rating: 17, rank: 0, member_id: 3}
+    ]
+
+    result =
+      SplitOneChevs.sort_members(members)
+
+    assert result ==[
+      %{rating: 8, rank: 4, member_id: 100},
+      %{rating: 17, rank: 0, member_id: 3},
+      %{rating: 6, rank: 0, member_id: 2},
+      %{rating: 5, rank: 0, member_id: 4}
+    ]
+
   end
 
   test "assign teams" do

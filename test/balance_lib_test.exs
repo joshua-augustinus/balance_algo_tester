@@ -64,8 +64,63 @@ defmodule Teiserver.Battle.BalanceLibTest do
       )
       |> Map.drop([:logs, :time_taken])
 
-      Logger.log(result)
 
+   end
+
+   test "loser picks bad balance" do
+    result =
+      BalanceLib.create_balance(
+        [
+          %{100 => 21},
+          %{101 => 2},
+          %{3 => 17},
+          %{4 => 18}
+        ],
+        2,
+        algorithm: "loser_picks"
+      )
+      |> Map.drop([:logs, :time_taken])
+
+
+      assert result.team_groups == %{
+        1 => [
+          %{count: 1, members: [100], group_rating: 21, ratings: [21]},
+          %{count: 1, members: [101], group_rating: 2, ratings: [2]}
+        ],
+        2 => [
+          %{count: 1, members: [4], group_rating: 18, ratings: [18]},
+          %{count: 1, members: [3], group_rating: 17, ratings: [17]}
+        ]
+      }
+   end
+
+   test "split one chevs with noobs" do
+    # Any user with id less than 5 is a one chev
+    # With the real codebase, the chev rank is pulled from DB but here it is mocked
+    result =
+      BalanceLib.create_balance(
+        [
+          %{100 => 21},
+          %{101 => 2},
+          %{3 => 17},
+          %{4 => 18}
+        ],
+        2,
+        algorithm: "split_one_chevs"
+      )
+      |> Map.drop([:logs, :time_taken])
+
+
+      assert result.team_groups == %{
+        1 => [
+          %{count: 1, members: [3], group_rating: 17, ratings: [17]},
+          %{count: 1, members: [100], group_rating: 21, ratings: [21]}
+        ],
+        2 => [
+          %{count: 1, members: [4], group_rating: 18, ratings: [18]},
+          %{count: 1, members: [101], group_rating: 2, ratings: [2]}
+        ]
+      }
    end
 
 end
