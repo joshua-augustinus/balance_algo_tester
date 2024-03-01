@@ -13,7 +13,7 @@ defmodule Teiserver.Battle.Balance.SplitOneChevs do
   ]
   """
   def perform(expanded_group, team_count, opts \\ []) do
-    members = flatten_members(expanded_group)
+    members = flatten_members(expanded_group) |> sort_members()
     teams = assign_teams(members, team_count)
     standardise_result(teams)
   end
@@ -45,6 +45,25 @@ defmodule Teiserver.Battle.Balance.SplitOneChevs do
 
   def get_rank(member_id) do
     CacheUser.calculate_rank(member_id, "Playtime")
+  end
+
+  @doc """
+  members=
+  [
+             %{rating: 8, rank: 4, member_id: 100},
+             %{rating: 5, rank: 0, member_id: 4},
+             %{rating: 6, rank: 0, member_id: 2},
+             %{rating: 17, rank: 0, member_id: 3}
+           ]
+
+  Output: Members will be sorted by rank descending; however, rank=0 players will always be last
+  """
+  def sort_members(members) do
+    non_noobs = Enum.filter(members, fn(x)->x.rank != 0 end)
+    noobs = Enum.filter(members, fn(x)->x.rank == 0 end)
+
+    [Enum.sort_by(non_noobs, fn(x)->x.rating end,&>=/2 ), Enum.sort_by(noobs, fn(x)->x.rating end,&>=/2 )]
+    |> List.flatten
   end
 
   @doc """
