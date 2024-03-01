@@ -25,13 +25,9 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
           %{count: 1, members: [4], ratings: [5], group_rating: 5}
         ]
       },
-      ratings: %{1 => 25, 2 => 11},
-      team_sizes: %{1 => 2, 2 => 2},
-      means: %{1 => 12.5, 2 => 5.5},
-      stdevs: %{1 => 4.5, 2 => 0.5},
+
       team_players: %{1 => [3, 100], 2 => [2, 4]},
-      captains: %{1 => 3, 2 => 2},
-      deviation: 56
+
     }
 
   end
@@ -115,8 +111,7 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
     )
 
     assert result ==%{
-      ratings: %{1 => 25, 2 => 11},
-      team_sizes: %{1 => 2, 2 => 2},
+
       team_groups: %{
         1 => [
           %{count: 1, members: [3], ratings: [17], group_rating: 17},
@@ -127,11 +122,9 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
           %{count: 1, members: [4], ratings: [5], group_rating: 5}
         ]
       },
-      means: %{1 => 12.5, 2 => 5.5},
-      stdevs: %{1 => 4.5, 2 => 0.5},
+
       team_players: %{1 => [3, 100], 2 => [2, 4]},
-      captains: %{1 => 3, 2 => 2},
-      deviation: 56
+
     }
    end
 

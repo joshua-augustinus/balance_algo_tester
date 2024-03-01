@@ -1,6 +1,7 @@
 defmodule Teiserver.Battle.Balance.SplitOneChevs do
   alias Teiserver.CacheUser
   alias Teiserver.Battle.BalanceLib
+  alias Teiserver.Battle.Logger
 
     @doc """
   Input:
@@ -11,7 +12,7 @@ defmodule Teiserver.Battle.Balance.SplitOneChevs do
       %{count: 1, members: [3], group_rating: 7, ratings: [7]}
   ]
   """
-  def perform(expanded_group, team_count) do
+  def perform(expanded_group, team_count, opts \\ []) do
     members = flatten_members(expanded_group)
     teams = assign_teams(members, team_count)
     standardise_result(teams)
@@ -120,36 +121,15 @@ defmodule Teiserver.Battle.Balance.SplitOneChevs do
            ]
   """
   def standardise_result(raw_input) do
-    ratings = standardise_ratings(raw_input)
-    team_sizes=standardise_team_sizes(raw_input)
-    team_groups= standardise_team_groups(raw_input)
-    means =
-      ratings
-      |> Map.new(fn {team, rating_sum} ->
-        {team, rating_sum / max(team_sizes[team], 1)}
-      end)
+      team_groups= standardise_team_groups(raw_input)
 
-      stdevs =
-        team_groups
-        |> Map.new(fn {team, group} ->
-          stdev =
-            group
-            |> Enum.map(fn m -> m.ratings end)
-            |> List.flatten()
-            |> Statistics.stdev()
-
-          {team, stdev}
-        end)
     %{
       team_groups: team_groups,
       team_players: standardise_team_players(raw_input),
-      ratings: ratings,
-      captains: standardise_captains(raw_input),
-      team_sizes: team_sizes,
-      deviation: BalanceLib.get_deviation(ratings),
-      means: means,
-      stdevs: stdevs
     }
+
+
+
   end
 
 

@@ -1,6 +1,7 @@
 defmodule Teiserver.Battle.BalanceLibTest do
   use ExUnit.Case, async: false
   alias Teiserver.Battle.BalanceLib
+  alias Teiserver.Battle.Logger
 
   test "loser picks simple users" do
     result =
@@ -48,5 +49,23 @@ defmodule Teiserver.Battle.BalanceLibTest do
              stdevs: %{1 => 1.5, 2 => 0.5},
            }
   end
+
+  test "split one chevs simple users" do
+    result =
+      BalanceLib.create_balance(
+        [
+          %{1 => 5},
+          %{2 => 6},
+          %{3 => 7},
+          %{4 => 8}
+        ],
+        2,
+        algorithm: "split_one_chevs"
+      )
+      |> Map.drop([:logs, :time_taken])
+
+      Logger.log(result)
+
+   end
 
 end
