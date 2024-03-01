@@ -145,6 +145,7 @@ defmodule Teiserver.Battle.Balance.SplitOneChevs do
     %{
       team_groups: team_groups,
       team_players: standardise_team_players(raw_input),
+      logs: ["Logs to be added in the future"]
     }
 
 
@@ -180,44 +181,6 @@ defmodule Teiserver.Battle.Balance.SplitOneChevs do
   def standardise_member_ids(members) do
     for  %{  member_id: member_id } <- members,
       do: member_id
-  end
-
-  def standardise_ratings(raw_input) do
-    Map.new(raw_input, fn x-> {x.team_id, sum_ratings(x.members)}end)
-  end
-
-  @doc """
-  members = [
-                 %{rating: 17, rank: 0, member_id: 3},
-                 %{rating: 8, rank: 4, member_id: 100}
-            ]
-               """
-  def sum_ratings(members) do
-    Enum.reduce(members, 0,fn x,acc->
-      x.rating + acc
-    end)
-  end
-
-  def standardise_captains(raw_input) do
-    Map.new(raw_input, fn x-> {x.team_id, get_captain(x.members).member_id}end)
-
-  end
-
-  def get_captain(members) do
-    default_captain = Enum.at(members,0)
-    Enum.reduce(members, default_captain ,fn x,acc->
-      if(x.rating > acc.rating) do
-        x
-    else
-      acc
-    end
-
-    end)
-  end
-
-  def standardise_team_sizes(raw_input) do
-    Map.new(raw_input, fn x-> {x.team_id, length(x.members)}end)
-
   end
 
 end
