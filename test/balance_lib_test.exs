@@ -62,7 +62,8 @@ defmodule Teiserver.Battle.BalanceLibTest do
         2,
         algorithm: "split_one_chevs"
       )
-      |> Map.drop([:logs, :time_taken])
+
+      assert length(result.logs) > 0
 
 
    end
