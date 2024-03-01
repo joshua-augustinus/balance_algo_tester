@@ -7,6 +7,7 @@ defmodule Teiserver.Battle.BalanceLib do
   alias Teiserver.Battle.Balance.BalanceTypes, as: BT
   alias Teiserver.Game.MatchRatingLib
   import Teiserver.Helper.NumberHelper, only: [int_parse: 1, round: 2]
+  alias Teiserver.Battle.Logger
 
   # These are default values and can be overridden as part of the call to create_balance()
 
@@ -45,7 +46,8 @@ defmodule Teiserver.Battle.BalanceLib do
     %{
       "loser_picks" => Teiserver.Battle.Balance.LoserPicks,
       "force_party" => Teiserver.Battle.Balance.ForceParty,
-      "cheeky_switcher_smart" => Teiserver.Battle.Balance.CheekySwitcherSmart
+      "cheeky_switcher_smart" => Teiserver.Battle.Balance.CheekySwitcherSmart,
+      "split_one_chevs" => Teiserver.Battle.Balance.SplitOneChevs
     }
   end
 
@@ -114,12 +116,20 @@ defmodule Teiserver.Battle.BalanceLib do
           m.perform(expanded_groups, team_count, opts)
       end
 
+
     # Now expand the results and calculate stats
-    balance_result
-    |> expand_balance_result()
-    |> calculate_balance_stats
-    |> cleanup_result
-    |> Map.put(:time_taken, System.system_time(:microsecond) - start_time)
+    fixed_result =
+    if(Map.has_key?(balance_result,:team_groups) ) do
+      # For split one chevs algo, the result will already have the team_groups
+      balance_result
+    else
+      balance_result
+      |> expand_balance_result()
+     end
+
+    fixed_result |> calculate_balance_stats |> cleanup_result |> Map.put(:time_taken, System.system_time(:microsecond) - start_time)
+
+
   end
 
   # Removes various keys we don't care about
