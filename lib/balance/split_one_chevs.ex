@@ -2,6 +2,18 @@ defmodule Teiserver.Battle.Balance.SplitOneChevs do
   alias Teiserver.CacheUser
   alias Teiserver.Battle.BalanceLib
   alias Teiserver.Battle.Logger
+  @moduledoc"""
+    This balance algorithm first sorts the users by visible OS (match rating) descending. Then all rank=0 (one chevs) will be placed at the bottom of this sorted list.
+
+    Next a team will be chosen to be the picking team. The picking team is the team with the least amount of players. If tied, then the team with the lowest total rating.
+
+    Next the picking team will pick the player at the top of the sorted list.
+
+    This is repeated until all players are chosen.
+
+    This algorithm completely ignores parties.
+
+  """
 
     @doc """
   Input:
