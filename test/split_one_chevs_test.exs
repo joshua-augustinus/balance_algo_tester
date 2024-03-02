@@ -7,6 +7,29 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
   #Define constants
   @split_algo "split_one_chevs"
 
+  test "split one chevs empty" do
+    result =
+      BalanceLib.create_balance(
+        [
+
+        ],
+        4,
+        algorithm: @split_algo
+      )
+
+      assert result ==%{
+        logs: [],
+        ratings: %{},
+        time_taken: 0,
+        captains: %{},
+        deviation: 0,
+        team_groups: %{},
+        team_players: %{},
+        team_sizes: %{},
+        means: %{},
+        stdevs: %{}
+      }
+  end
 
   test "split one chevs FFA" do
     result =
