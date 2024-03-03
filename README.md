@@ -16,6 +16,11 @@ mix deps.get
 mix test
 ```
 
+To test a specific file, reference the file
+```
+mix test test/split_one_chevs_test.exs
+```
+
 ### Installation Issues
 If you have trouble calling mix deps.get, make sure you have a github ssh already set up. 
 
