@@ -164,7 +164,7 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
     result =
       SplitOneChevs.assign_teams(members, 2)
 
-    assert result == [
+    assert result.teams == [
              %{
                members: [
                  %{rating: 17, rank: 0, member_id: 3},
@@ -193,47 +193,25 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
            ]
   end
 
-  test "standardise result" do
-    result = SplitOneChevs.standardise_result(
-      [
-        %{
-          members: [
-            %{rating: 17, rank: 0, member_id: 3},
-            %{rating: 8, rank: 4, member_id: 100}
-          ],
-          team_id: 1
-        },
-        %{
-          members: [
-            %{rating: 6, rank: 0, member_id: 2},
-            %{rating: 5, rank: 0, member_id: 4}
-          ],
-          team_id: 2
-        }
-      ]
-    )|> Map.drop([:logs, :time_taken])
-
-    assert result ==%{
-
-      team_groups: %{
-        1 => [
-          %{count: 1, members: [3], ratings: [17], group_rating: 17},
-          %{count: 1, members: [100], ratings: [8], group_rating: 8}
-        ],
-        2 => [
-          %{count: 1, members: [2], ratings: [6], group_rating: 6},
-          %{count: 1, members: [4], ratings: [5], group_rating: 5}
-        ]
-      },
-
-      team_players: %{1 => [3, 100], 2 => [2, 4]},
-
-    }
-   end
-
   test "calculate standard deviation" do
     input = [8,5]
     result = Statistics.stdev(input);
     assert result==1.5
+  end
+
+  test "logs" do
+    result =
+      BalanceLib.create_balance(
+        [
+          %{1 => 5},
+          %{2 => 6},
+          %{3 => 7},
+          %{4 => 8}
+        ],
+        4,
+        algorithm: @split_algo
+      )
+
+      assert result.logs == ["User 4 picked for Team 1", "User 3 picked for Team 2", "User 2 picked for Team 3", "User 1 picked for Team 4"]
   end
 end
