@@ -119,17 +119,17 @@ defmodule Teiserver.Battle.SplitOneChevsTest do
     expanded_group = [
       %{count: 2, members: [100, 4], group_rating: 13, ratings: [8, 5]},
       %{count: 1, members: [2], group_rating: 6, ratings: [6]},
-      %{count: 1, members: [3], group_rating: 7, ratings: [17]}
+      %{count: 1, members: ["noob1"], group_rating: 7, ratings: [17]}
     ]
 
     result =
       SplitOneChevs.flatten_members(expanded_group)
 
     assert result == [
-             %{rating: 8, rank: 4, member_id: 100},
-             %{rating: 5, rank: 0, member_id: 4},
-             %{rating: 6, rank: 0, member_id: 2},
-             %{rating: 17, rank: 0, member_id: 3}
+             %{rating: 8, rank: 1, member_id: 100},
+             %{rating: 5, rank: 1, member_id: 4},
+             %{rating: 6, rank: 1, member_id: 2},
+             %{rating: 17, rank: 0, member_id: "noob1"}
            ]
   end
 

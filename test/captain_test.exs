@@ -85,4 +85,17 @@ defmodule Teiserver.Battle.CaptainTest do
              stdevs: %{1 => 9.29297449689818, 2 => 8.671072598012312}
            }
   end
+
+  test "string userids" do
+    result =
+      BalanceLib.create_balance(
+        [
+          %{"hitman" => 9.39, "kayme" => 15.14},
+          %{"noob1" => 28.84, "morgan" => 15.06},
+        ],
+        2,
+        algorithm: "split_one_chevs"
+      )
+    Logger.log(result, "string user ids")
+  end
 end
