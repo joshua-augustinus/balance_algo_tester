@@ -82,7 +82,7 @@ defmodule Teiserver.CacheUser do
     end
   end
 
-  def rank_time(userid) do
+  def rank_time(_userid) do
     5
   end
 end
