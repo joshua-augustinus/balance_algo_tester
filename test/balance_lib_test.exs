@@ -103,8 +103,8 @@ defmodule Teiserver.Battle.BalanceLibTest do
         [
           %{100 => 21},
           %{101 => 2},
-          %{3 => 17},
-          %{4 => 18}
+          %{"noob1" => 17},
+          %{"noob2" => 18}
         ],
         2,
         algorithm: "split_one_chevs"
@@ -114,11 +114,11 @@ defmodule Teiserver.Battle.BalanceLibTest do
 
       assert result.team_groups == %{
         1 => [
-          %{count: 1, members: [3], group_rating: 17, ratings: [17]},
+          %{count: 1, members: ["noob1"], group_rating: 17, ratings: [17]},
           %{count: 1, members: [100], group_rating: 21, ratings: [21]}
         ],
         2 => [
-          %{count: 1, members: [4], group_rating: 18, ratings: [18]},
+          %{count: 1, members: ["noob2"], group_rating: 18, ratings: [18]},
           %{count: 1, members: [101], group_rating: 2, ratings: [2]}
         ]
       }

@@ -71,9 +71,18 @@ defmodule Teiserver.CacheUser do
   end
 
   @moduledoc """
-  This moc assumes the hours played is equal to the userid
+   If your userid contains the word noob then your time is 0
+   Otherwise you've played for 5 hours
   """
+  def rank_time(userid) when is_bitstring((userid)) do
+    if String.contains?(userid, "noob") do
+      0
+    else
+      5
+    end
+  end
+
   def rank_time(userid) do
-    userid
+    5
   end
 end
