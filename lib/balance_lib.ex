@@ -52,6 +52,17 @@ defmodule Teiserver.Battle.BalanceLib do
   end
 
   @doc """
+  Teifion only allowed force_party to be used by mods because it led to noob-stomping unbalanced teams
+  """
+  def get_allowed_algorithms(is_moderator) do
+     if(is_moderator) do
+       Teiserver.Battle.BalanceLib.algorithm_modules() |> Map.keys()
+    else
+       Teiserver.Battle.BalanceLib.algorithm_modules() |> Map.keys() |> List.delete("force_party")
+    end
+  end
+
+  @doc """
   groups is a list of maps of %{userid => rating_value}
 
   The result format with the following keys:

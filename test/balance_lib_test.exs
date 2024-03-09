@@ -3,6 +3,19 @@ defmodule Teiserver.Battle.BalanceLibTest do
   alias Teiserver.Battle.BalanceLib
   alias Teiserver.Battle.Logger
 
+  test "get allowed algos" do
+    result_when_mod = BalanceLib.get_allowed_algorithms(true)
+    assert result_when_mod == [
+      "cheeky_switcher_smart",
+      "force_party",
+      "loser_picks",
+      "split_one_chevs"
+    ]
+
+    result_when_not_mod = BalanceLib.get_allowed_algorithms(false)
+    assert result_when_not_mod == ["cheeky_switcher_smart", "loser_picks", "split_one_chevs"]
+  end
+
   test "loser picks simple users" do
     result =
       BalanceLib.create_balance(
