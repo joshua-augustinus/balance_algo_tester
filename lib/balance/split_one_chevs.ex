@@ -23,7 +23,7 @@ defmodule Teiserver.Battle.Balance.SplitOneChevs do
       %{count: 1, members: [3], group_rating: 7, ratings: [7]}
   ]
   """
-  def perform(expanded_group, team_count, opts \\ []) do
+  def perform(expanded_group, team_count, _opts \\ []) do
     members = flatten_members(expanded_group) |> sort_members()
     %{teams: teams, logs: logs} = assign_teams(members, team_count)
     standardise_result(teams, logs)
